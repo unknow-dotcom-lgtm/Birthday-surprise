@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>The Midnight Lock — A Private Birthday Experience</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app" aria-live="polite">
+    <header class="masthead">
+      <h1 class="title">The Midnight Lock 🔒</h1>
+      <div class="subtitle">A private, timed birthday invitation — curated just for you</div>
+    </header>
+
+    <nav class="progress" aria-hidden="true">
+      <div class="progress-dot active" data-target="page1" title="1"></div>
+      <div class="progress-dot" data-target="page2" title="2"></div>
+      <div class="progress-dot" data-target="page3" title="3"></div>
+      <div class="progress-dot" data-target="page4" title="4"></div>
+      <div class="progress-dot" data-target="page5" title="5"></div>
+      <div class="progress-dot" data-target="page6" title="6"></div>
+      <div class="progress-dot" data-target="page7" title="7"></div>
+    </nav>
+
+    <section id="page1" class="page active" role="region" aria-label="The Midnight Lock">
+      <div class="card">
+        <div class="emoji">🌌</div>
+        <h2>Private Access Required ⏱️</h2>
+        <p class="muted">System Status: Secured until <strong id="countdown-date"></strong></p>
+        <p class="lead">You have received an exclusive invitation to a private digital experience curated entirely for you, but access to my heart is strictly timed to the exact moment your special day begins.</p>
+        <p class="warning">⚠️ ATTENTION: Please read each section carefully and ensure you select the correct path to proceed, beautiful.</p>
+
+        <div class="countdown" aria-hidden="false">
+          <time id="countdown" datetime=""></time>
+        </div>
+
+        <div class="actions">
+          <button class="btn primary" data-next="page2">Unlock My Devotion 🔓</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="page2" class="page" role="region" aria-label="Reconnecting the Signal">
+      <div class="card">
+        <div class="emoji">📡</div>
+        <h2>Reconnecting the Signal</h2>
+        <p class="lead">Signal Restored... Did you miss me as much as I missed you? 😉</p>
+        <p>I know my radar went completely quiet for the last 6 months, and I know that silence may have caused doubt or frustration. Tonight I'm back because I could not let the most captivating person in my life celebrate her birthday without reclaiming my spot as the guy who is completely crazy about you.</p>
+        <div class="actions">
+          <button class="btn" data-next="page3">Step closer into my arms ✨</button>
+          <button class="btn ghost" data-prev="page1">Back</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="page3" class="page" role="region" aria-label="The Ultimate Flex">
+      <div class="card">
+        <div class="emoji">🌹</div>
+        <h2>The Ultimate Flex 👑</h2>
+        <p class="lead">Happy Birthday to the one who completely owns me.</p>
+        <p>You have successfully navigated another year, but let's be entirely honest—the absolute highlight of my year has simply been knowing that you belong to me.</p>
+        <div class="actions">
+          <button class="btn" data-next="page4">Melt into the next step 💋</button>
+          <button class="btn ghost" data-prev="page2">Back</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="page4" class="page" role="region" aria-label="The Spoiled Princess Manifesto">
+      <div class="card">
+        <div class="emoji">🥂</div>
+        <h2>The Spoiled Princess Manifesto</h2>
+        <p class="muted">Your Only Responsibilities for Today, My Queen:</p>
+        <ul class="manifesto">
+          <li>Turn off the rest of the world and rest under a mountain of blankets.</li>
+          <li>Indulge in every one of your favorite treats — calories legally do not exist when you are this beautiful.</li>
+          <li>Remember that I am counting down the exact seconds until I can hold you tight.</li>
+        </ul>
+        <div class="actions">
+          <button class="btn" data-next="page5">Unlock your romantic voucher 🍿</button>
+          <button class="btn ghost" data-prev="page3">Back</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="page5" class="page" role="region" aria-label="The Reconciliation">
+      <div class="card">
+        <div class="emoji">🥺</div>
+        <h2>The Reconciliation</h2>
+        <p class="lead">A Moment of Absolute Honesty...</p>
+        <p>I am fully aware that stepping away for 6 months was a massive mistake. I want to look you in the eyes and ask—are you ready to forgive your favorite distraction?</p>
+
+        <div class="choices">
+          <button class="btn danger" data-action="deciding">I am still deciding if you are out of trouble. 🤬</button>
+          <button class="btn primary" data-action="forgive">I will forgive you only if you pull me close. 😤</button>
+        </div>
+
+        <div class="actions">
+          <button class="btn ghost" data-prev="page4">Back</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="page5.5" class="page" role="region" aria-label="System Override">
+      <div class="card">
+        <div class="emoji">🛑</div>
+        <h2>System Override</h2>
+        <p class="muted">System Override: Action Required</p>
+        <p>Nice try, but you are blocked from staying away from me. 💘</p>
+        <p>Access Denied because the system has completely bypassed your hesitation, refusing to let you pout or hold onto any lingering doubts on your birthday—so the universe has made the choice for you: forgive me, enjoy this site, and love the guy who built it just to see you smile.</p>
+        <div class="actions">
+          <button class="btn primary" data-next="page6">Accept terms & hold my hand 🌙</button>
+          <button class="btn" id="view-final">View the final arrangement 🎁</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="page6" class="page" role="region" aria-label="The Plot Twist & The Reservation">
+      <div class="card">
+        <div class="emoji">🌹❤️</div>
+        <h2>The Plot Twist & The Reservation</h2>
+        <p class="lead">My Biggest Mistake & The Real Gift...</p>
+        <p>Leaving you in the dark for 6 months was a profound mistake. A standard message could never suffice—so I'm traveling to come see you in person.</p>
+
+        <form id="reservation-form" class="form" aria-label="Confirm meetup form">
+          <label>Where shall we arrange our primary meetup?<input name="location" required placeholder="City / Venue"></label>
+          <label>Which date am I officially picking you up?<input type="date" name="date" required></label>
+          <label>Which film are we watching while I hold your hand?<input name="movie" placeholder="Movie name"></label>
+          <label>Which restaurant are we visiting to feed my favorite girl?<input name="restaurant" placeholder="Restaurant"></label>
+          <label>Direct Line / WhatsApp (optional)<input name="phone" placeholder="e.g. +1 234-567-890" inputmode="tel"></label>
+
+          <div class="form-actions">
+            <button type="submit" class="btn primary">Confirm Our Date & Read My Final Vow 💌</button>
+            <button type="button" class="btn ghost" data-prev="page5.5">Back</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section id="page7" class="page" role="region" aria-label="The Eternal Orbit">
+      <div class="card">
+        <div class="emoji">🔒✨</div>
+        <h2>The Eternal Orbit</h2>
+        <p class="lead">Completely and Forever Yours.</p>
+        <p>You have reached the final destination of this journey where all navigation options conclude—ensuring I will never let you drift away from my life or my arms again. Happy Birthday, my gorgeous, sensitive queen—thank you for allowing me back into your world. I cannot wait to hold you in person very soon. 🤍✨</p>
+
+        <div class="actions">
+          <button class="btn" id="restart">Start Over</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footnote">
+      <small>Built with devotion · Privacy respected · No tracking</small>
+    </footer>
+  </main>
+
+  <div id="override-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-content" role="document">
+      <button class="close" aria-label="Close overlay">✕</button>
+      <h3>System Override Engaged</h3>
+      <p>The universe insists you forgive me. Would you like a heartfelt apology or a promise in person?</p>
+      <div class="actions">
+        <button class="btn primary" data-next="page6">Promise in Person</button>
+        <button class="btn" data-next="page7">Heartfelt Apology</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
