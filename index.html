@@ -3,177 +3,401 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Midnight Lock — Private Access</title>
+    <title>Curated For You</title>
     <style>
         :root {
-            --bg-color: #2b0a1d;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --accent-color: #ff5a8b;
-            --accent-color-2: #ff9bb3;
-            --text-color: #fff6fb;
-            --text-muted: #f0dfe8;
-            --border-glow: rgba(255, 90, 139, 0.25);
+            --bg-color: #0b0914;
+            --accent-primary: #d4af37;
+            --accent-secondary: #ffccd5;
+            --text-main: #f0e6ef;
+            --text-muted: #a393bf;
+            --card-bg: rgba(25, 20, 40, 0.65);
+            --button-bg: linear-gradient(135deg, #4a154b, #6b114d);
+            --button-hover: linear-gradient(135deg, #6b114d, #8c1c66);
         }
-        * { box-sizing: border-box; margin:0; padding:0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-        html{ scroll-behavior: smooth; }
-        html,body{height:100%}
-        body{
-            background: radial-gradient(600px 400px at 10% 20%, rgba(255,155,179,0.06), transparent 12%),
-                        radial-gradient(700px 500px at 90% 80%, rgba(255,90,139,0.05), transparent 14%),
-                        linear-gradient(180deg, #3a0620 0%, var(--bg-color) 60%, #12020a 100%);
-            color:var(--text-color);
-            min-height:100vh; 
-            /* Allow the page to scroll naturally */
-            padding:28px; position:relative; overflow:auto;
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Georgia', serif;
         }
-        body::before{ content:''; position:fixed; inset:0; background: radial-gradient(60% 40% at 50% 30%, rgba(255,155,179,0.03), transparent 30%); pointer-events:none; z-index:0 }
-        .hearts{ position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden }
-        .heart{ position:absolute; transform:translateY(0) rotate(-10deg); opacity:0.9; filter:drop-shadow(0 8px 20px rgba(255,90,139,0.12)); animation: floatUp linear infinite }
-        .heart:before,.heart:after{ content:''; position:absolute; width:26px; height:26px; background:linear-gradient(180deg,var(--accent-color),var(--accent-color-2)); border-radius:50px 50px 0 0 }
-        .heart:before{ transform: translate(-13px,0) rotate(-45deg) }
-        .heart:after{ transform: translate(13px,0) rotate(45deg) }
-        @keyframes floatUp{ 0%{ transform:translateY(0) scale(0.9) rotate(-10deg); opacity:0 } 10%{ opacity:0.95 } 50%{ transform:translateY(-45vh) scale(1.05) rotate(10deg); opacity:0.95 } 100%{ transform:translateY(-110vh) scale(1) rotate(25deg); opacity:0 } }
-        .page{ display:none; width:100%; max-width:720px; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)); backdrop-filter: blur(14px) saturate(120%); border-radius:20px; padding:36px; text-align:center; z-index:2; border:1px solid rgba(255,255,255,0.04); box-shadow: 0 18px 60px rgba(10,6,10,0.6), 0 0 40px var(--border-glow); margin:40px auto; transition: transform 400ms ease, opacity 400ms ease; }
-        .page.active{ display:block; transform: translateY(0); opacity:1 }
-        .page.inactive{ transform: translateY(10px); opacity:0 }
-        .icon{ font-size:2.8rem; margin-bottom:18px }
-        h1{ font-size:1.6rem; margin-bottom:12px }
-        .status-badge{ background: linear-gradient(90deg, rgba(255,90,139,0.08), rgba(255,155,179,0.04)); color:var(--accent-color); padding:8px 16px; border-radius:999px; font-weight:600; margin-bottom:18px; display:inline-block; border:1px solid rgba(255,90,139,0.12) }
-        p{ color:var(--text-muted); font-size:1rem; line-height:1.7; margin-bottom:16px }
-        .attention-box{ background: rgba(255,255,255,0.02); border-left:4px solid var(--accent-color); padding:12px; border-radius:8px; text-align:left; margin:18px 0 }
-        .countdown{ display:flex; justify-content:center; gap:12px; margin:18px 0 24px }
-        .countdown-item{ background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:10px 12px; border-radius:10px; min-width:62px; border:1px solid rgba(255,255,255,0.03) }
-        .countdown-time{ font-size:1.35rem; font-weight:700; color:#fff }
-        .countdown-label{ font-size:0.72rem; color:var(--text-muted); text-transform:uppercase }
-        .btn{ display:block; width:100%; background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-2) 100%); color:white; border:0; padding:14px 18px; border-radius:999px; font-weight:700; cursor:pointer; box-shadow:0 8px 30px rgba(255,90,139,0.18); transition:transform .18s ease }
-        .btn:hover{ transform:translateY(-4px) }
-        .btn-secondary{ background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--text-color) }
-        .form-group{ text-align:left; margin-bottom:14px }
-        .form-group label{ color:var(--text-color); display:block; margin-bottom:8px; font-weight:600 }
-        .form-group input{ width:100%; padding:12px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); background:rgba(255,255,255,0.02); color:var(--text-color) }
-        .contact-info{ margin:18px 0; background: rgba(255,255,255,0.02); padding:12px; border-radius:10px; border:1px dashed rgba(255,255,255,0.03); color:var(--text-muted) }
-        .override-title{ color:var(--accent-color); text-shadow:0 0 14px rgba(255,155,179,0.12) }
-        @media (max-width:520px){ .page{ padding:22px } }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            background-image:   
+                radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
+                radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px);
+            background-size: 550px 550px, 350px 350px, 250px 250px;
+            background-position: 0 0, 40px 60px, 130px 270px;
+            animation: backgroundMove 120s linear infinite;
+        }
+
+        @keyframes backgroundMove {
+            from { background-position: 0 0, 40px 60px, 130px 270px; }
+            to { background-position: 550px 550px, 390px 410px, 380px 820px; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 580px;
+            padding: 25px;
+            perspective: 1000px;
+        }
+
+        .page {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 25px rgba(107, 17, 77, 0.2);
+            display: none;
+            transition: all 0.5s ease-in-out;
+            transform-style: preserve-3d;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px) rotateX(-5deg); }
+            to { opacity: 1; transform: translateY(0) rotateX(0); }
+        }
+
+        .icon-header {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 8px rgba(255, 204, 213, 0.6));
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            color: var(--accent-primary);
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 400;
+            letter-spacing: 1px;
+            line-height: 1.3;
+        }
+
+        p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            text-align: center;
+            color: var(--text-main);
+            font-style: italic;
+        }
+
+        .highlight-text {
+            color: var(--accent-secondary);
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px 20px;
+            background: var(--button-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            text-align: center;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .btn:hover:not(:disabled) {
+            background: var(--button-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(107, 17, 77, 0.4);
+        }
+
+        .btn:disabled {
+            background: #2a2033;
+            color: #635673;
+            cursor: not-allowed;
+            border: 1px solid transparent;
+            box-shadow: none;
+        }
+
+        .countdown-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+            border: 1px dashed rgba(214, 175, 57, 0.3);
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-secondary);
+            margin-top: 10px;
+        }
+
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .countdown-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-top: 5px;
+            font-family: sans-serif;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: var(--accent-secondary);
+            font-family: sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            background: rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+        }
+
+        .alert-box {
+            background: rgba(214, 40, 40, 0.15);
+            border: 1px solid rgba(214, 40, 40, 0.4);
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 0.9rem;
+            color: #ffb3b3;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .final-wish {
+            white-space: pre-line;
+            text-align: left;
+            font-size: 1.05rem;
+            line-height: 1.9;
+        }
     </style>
 </head>
 <body>
-    <div class="hearts" aria-hidden="true">
-        <span class="heart" style="left:6%; bottom:-12%; width:20px; height:20px; animation-duration:12s; animation-delay:0s"></span>
-        <span class="heart" style="left:18%; bottom:-8%; width:28px; height:28px; animation-duration:10s; animation-delay:0.6s"></span>
-        <span class="heart" style="left:33%; bottom:-14%; width:18px; height:18px; animation-duration:14s; animation-delay:1.2s"></span>
-        <span class="heart" style="left:48%; bottom:-10%; width:26px; height:26px; animation-duration:11s; animation-delay:0.3s"></span>
-        <span class="heart" style="left:62%; bottom:-16%; width:22px; height:22px; animation-duration:13s; animation-delay:1.8s"></span>
-        <span class="heart" style="left:78%; bottom:-9%; width:30px; height:30px; animation-duration:9s; animation-delay:1s"></span>
-    </div>
 
-    <!-- Page 1: The Midnight Lock -->
-    <div id="page1" class="page active" role="region" aria-label="The Midnight Lock">
-        <div class="icon">🌌</div>
-        <h1>The Midnight Lock 🔒</h1>
-        <div class="status-badge">⏱️ System Status: Secured until July 19th at 12:00 AM</div>
+<div class="container">
+    <!-- Page 1 -->
+    <div id="page1" class="page active">
+        <div class="icon-header">🌌</div>
+        <h2>Private Access Required ⏱️</h2>
+        <p>System Status: <span class="highlight-text">Secured until July 19th at 12:00 AM</span></p>
         <p>You have received an exclusive invitation to a private digital space curated entirely for you. Access is strictly timed to the exact, magical moment your special day begins, because a celebration this meaningful deserves to wait for its perfect time.</p>
-        <div class="attention-box"><strong>⚠️ NOTE:</strong> Please read each section carefully and choose your path forward, beautiful.</div>
-        <div class="countdown" role="timer" aria-live="polite">
-            <div class="countdown-item"><span class="countdown-time" id="days">00</span><span class="countdown-label">Days</span></div>
-            <div class="countdown-item"><span class="countdown-time" id="hours">00</span><span class="countdown-label">Hours</span></div>
-            <div class="countdown-item"><span class="countdown-time" id="minutes">00</span><span class="countdown-label">Mins</span></div>
-            <div class="countdown-item"><span class="countdown-time" id="seconds">00</span><span class="countdown-label">Secs</span></div>
+        <div class="alert-box">
+            ⚠️ <strong>NOTE:</strong> Please read each section carefully and choose your path forward, beautiful.
         </div>
-        <button class="btn" onclick="nextPage('page2')">Proceed to the Next Chapter 🔓</button>
+        <div class="countdown-container">
+            <div class="countdown-label" style="font-size:0.85rem;">Time Left Until Access Granted:</div>
+            <div id="timer" class="countdown">
+                <div class="countdown-item"><span id="days">00</span><span class="countdown-label">Days</span></div>
+                <div class="countdown-item"><span id="hours">00</span><span class="countdown-label">Hrs</span></div>
+                <div class="countdown-item"><span id="minutes">00</span><span class="countdown-label">Mins</span></div>
+                <div class="countdown-item"><span id="seconds">00</span><span class="countdown-label">Secs</span></div>
+            </div>
+        </div>
+        <button id="unlockBtn" class="btn" onclick="nextPage(2)" disabled>Proceed to the Next Chapter ��</button>
     </div>
 
-    <!-- Page 2: Reconnecting the Signal -->
-    <div id="page2" class="page" role="region" aria-label="Reconnecting the Signal">
-        <div class="icon">📡</div>
-        <h1>Reconnecting the Signal 🛰️</h1>
-        <div class="status-badge">Did you miss me as much as I missed you? 😉</div>
+    <!-- Page 2 -->
+    <div id="page2" class="page">
+        <div class="icon-header">📡</div>
+        <h2>Signal Restored... Did you miss me as much as I missed you? 😉</h2>
         <p>I know my radar went completely quiet for the last 6 months, and I know that silence may have caused doubt or hurt. I am so deeply sorry for the distance. But through it all, my thoughts have inevitably pulled me right back to your side tonight. I simply could not let the most captivating person in my world celebrate her birthday without trying to reclaim my spot as the guy who is completely crazy about you.</p>
-        <button class="btn" onclick="nextPage('page3')">Walk Forward Into My World ✨</button>
+        <button class="btn" onclick="nextPage(3)">Walk Forward Into My World ✨</button>
     </div>
 
-    <!-- Page 3: The Ultimate Devotion -->
-    <div id="page3" class="page" role="region" aria-label="The Ultimate Devotion">
-        <div class="icon">🌹</div>
-        <h1>The Ultimate Devotion 👑</h1>
-        <p>Happy Birthday to the one who holds my entire heart. You have successfully navigated another beautiful year, and let's be entirely honest—the absolute highlight of my year has simply been the privilege of knowing you and holding you close in my thoughts. No matter how much distance the world tries to put between us, nothing can change the beautiful truth that your heart is the only place I ever want to be.</p>
-        <button class="btn" onclick="nextPage('page4')">Let Me Show You How Much I Care ✨</button>
+    <!-- Page 3 -->
+    <div id="page3" class="page">
+        <div class="icon-header">🌹</div>
+        <h2>Happy Birthday to the one who holds my entire heart.</h2>
+        <p>You have successfully navigated another beautiful year, and let's be entirely honest—the absolute highlight of my year has simply been the privilege of knowing you and holding you close in my thoughts. No matter how much distance the world tries to put between us, nothing can change the beautiful truth that your heart is the only place I ever want to be.</p>
+        <button class="btn" onclick="nextPage(4)">Let Me Show You How Much I Care ✨</button>
     </div>
 
-    <!-- Page 4: The Spoiled Princess Manifesto -->
-    <div id="page4" class="page" role="region" aria-label="The Spoiled Princess Manifesto">
-        <div class="icon">🥂</div>
-        <h1>The Spoiled Princess Manifesto 🥞🛌</h1>
-        <p>Your Only Responsibilities for Today, My Queen: Since today is entirely dedicated to honoring you, you are officially requested to turn off the rest of the world, rest under a mountain of blankets for as long as your gorgeous heart desires, and indulge in absolutely every single one of your favorite treats. Calories legally do not exist when you are this breathtaking. Just remember that I am counting down the exact seconds until I can hold you tight.</p>
-        <button class="btn" onclick="nextPage('page5')">Reveal Your Birthday Surprise 🍿</button>
+    <!-- Page 4 -->
+    <div id="page4" class="page">
+        <div class="icon-header">🥂</div>
+        <h2>Your Only Responsibilities for Today, My Queen:</h2>
+        <p>Since today is entirely dedicated to honoring you, you are officially requested to turn off the rest of the world, rest under a mountain of blankets for as long as your gorgeous heart desires, and indulge in absolutely every single one of your favorite treats. Calories legally do not exist when you are this breathtaking. Just remember that I am counting down the exact seconds until I can hold you tight.</p>
+        <button class="btn" onclick="nextPage(5)">Reveal Your Birthday Surprise 🍿</button>
     </div>
 
-    <!-- Page 5: The Reconciliation -->
-    <div id="page5" class="page" role="region" aria-label="The Reconciliation">
-        <div class="icon">🥺</div>
-        <h1>The Reconciliation 🥺</h1>
-        <p>A Moment of Absolute Honest... I am fully aware that stepping away for 6 months was a massive mistake. Knowing how deeply and beautifully you feel things, I want to look you in the eyes and gently ask—are you ready to forgive your favorite distraction, or do I still need to earn my way back into your good graces?</p>
-        <button class="btn btn-secondary" onclick="nextPage('page5_5')">I am still deciding if you are out of trouble. 😤</button>
-        <button class="btn" onclick="nextPage('page6')">I will forgive you only if you promise to hold me close. 🤍</button>
+    <!-- Page 5 -->
+    <div id="page5" class="page">
+        <div class="icon-header">🥺</div>
+        <h2>A Moment of Absolute Honesty...</h2>
+        <p>I am fully aware that stepping away for 6 months was a massive mistake. Knowing how deeply and beautifully you feel things, I want to look you in the eyes and gently ask—are you ready to forgive your favorite distraction, or do I still need to earn my way back into your good graces?</p>
+        <button class="btn" onclick="nextPage(5.5)">I will forgive you only if you promise to hold me close. 🤍</button>
+        <button class="btn" onclick="nextPage(5.5)">I am still deciding if you are out of trouble. 😤</button>
     </div>
 
-    <!-- Page 5.5: System Override -->
-    <div id="page5_5" class="page" role="region" aria-label="System Override">
-        <div class="icon">🛑</div>
-        <h1 class="override-title">System Override 🛑</h1>
-        <div class="status-badge">Connection Re-established</div>
-        <p>Nice try, but the system gently refuses to let you stay away from me. 💘 Access Denied because this website has completely bypassed your hesitation. It simply refuses to let you pout or hold onto any lingering doubts on your birthday, which means the universe has made the choice for us—it gently insists that you forgive me, that you smile at this screen, and honestly, that you open your heart to the guy who built this just to see you happy.</p>
-        <button class="btn" onclick="nextPage('page6')">Accept Terms & View Our Plans 🌙</button>
+    <!-- Page 5.5 -->
+    <div id="page5.5" class="page">
+        <div class="icon-header">🛑</div>
+        <h2>🛑 System Override: Connection Re-established</h2>
+        <p>Nice try, but the system gently refuses to let you stay away from me. 💘</p>
+        <p>Access Denied because this website has completely bypassed your hesitation. It simply refuses to let you pout or hold onto any lingering doubts on your birthday, which means the universe has made the choice for us—it gently insists that you forgive me, that you smile at this screen, and honestly, that you open your heart to the guy who built this just to see you happy.</p>
+        <button class="btn" onclick="nextPage(6)">Accept Terms & View Our Plans 🌙</button>
     </div>
 
-    <!-- Page 6: The Plot Twist & The Promise -->
-    <div id="page6" class="page" role="region" aria-label="The Plot Twist & The Promise">
-        <div class="icon">🌹❤️</div>
-        <h1>The Plot Twist & The Promise ✈️🎬</h1>
-        <p>My Biggest Mistake & The Real Gift... Leaving a girl as precious, sensitive, and breathtaking as you in the dark for 6 months was a profound mistake. Because a standard digital message could never suffice for someone who deserves the absolute world, the real gift is that I am traveling to come see you in person.</p>
-        <form id="reservationForm" onsubmit="submitDate(event)">
-            <div class="form-group"><label for="meetup">📍 Where shall we arrange our primary meetup?</label><input id="meetup" required placeholder="City / Venue"></div>
-            <div class="form-group"><label for="date">📅 Which date am I officially picking you up?</label><input id="date" required placeholder="e.g. July 20th"></div>
-            <div class="form-group"><label for="movie">🍿 Which film are we watching while I hold your hand?</label><input id="movie" required placeholder="Movie name"></div>
-            <div class="form-group"><label for="restaurant">🍽️ Which restaurant are we visiting to feed my favorite girl right after?</label><input id="restaurant" required placeholder="Restaurant"></div>
-            <div class="contact-info">📞 <strong>Direct Line / WhatsApp:</strong> 1234577890</div>
+    <!-- Page 6 -->
+    <div id="page6" class="page">
+        <div class="icon-header">🌹❤️</div>
+        <h2>My Biggest Mistake & The Real Gift...</h2>
+        <p>Leaving a girl as precious, sensitive, and breathtaking as you in the dark for 6 months was a profound mistake. Because a standard digital message could never suffice for someone who deserves the absolute world, the real gift is that I am traveling to come see you in person.</p>
+          
+        <form id="dateForm" onsubmit="submitForm(event)">
+            <div class="form-group">
+                <label>📍 Where shall we arrange our primary meetup?</label>
+                <input type="text" placeholder="Your favorite spot..." required>
+            </div>
+            <div class="form-group">
+                <label>📅 Which date am I officially picking you up?</label>
+                <input type="text" placeholder="e.g. July 20th" required>
+            </div>
+            <div class="form-group">
+                <label>🍿 Which film are we watching while I hold your hand?</label>
+                <input type="text" placeholder="Movie title..." required>
+            </div>
+            <div class="form-group">
+                <label>🍽️ Which restaurant are we visiting right after?</label>
+                <input type="text" placeholder="Delicious choices..." required>
+            </div>
+            <div class="form-group">
+                <label>📞 Direct Line / WhatsApp</label>
+                <input type="text" value="1234577890" readonly style="color: var(--text-muted); cursor: not-allowed; background: rgba(0,0,0,0.2);">
+            </div>
             <button type="submit" class="btn">Confirm Our Date & Read My Final Wish 💌</button>
         </form>
     </div>
 
-    <!-- Page 7: The Eternal Orbit -->
-    <div id="page7" class="page" role="region" aria-label="The Eternal Orbit">
-        <div class="icon">🔒✨</div>
-        <h1>The Eternal Orbit 🌌</h1>
-        <p>The Greatest Wish for My Whole World. You have reached the final destination of this journey, where all the screens fade away and only my true feelings remain. Happy Birthday, my gorgeous, sensitive queen. On this beautiful day, my greatest wish is for your heart to be filled with the absolute peace, joy, and laughter you so deeply deserve. May this year bring you endless reasons to smile, dreams that come true effortlessly, and the comfort of knowing you are fiercely cherished every single second.</p>
-        <p>Thank you for letting me back into your world. No matter the distance we’ve crossed or the silence behind us, you have my complete, undivided devotion from this moment forward. I will never let you drift away again. Countless miles couldn't keep me away, and honestly, I am counting down the minutes because I absolutely cannot wait to finally meet you and hold you in person. Sleep beautifully tonight, celebrate beautifully tomorrow, and know that I am on my way to you. 🤍✨</p>
+    <!-- Page 7 -->
+    <div id="page7" class="page">
+        <div class="icon-header">🔒✨</div>
+        <h2>The Greatest Wish for My Whole World.</h2>
+        <div class="final-wish">
+            <p>You have reached the final destination of this journey, where all the screens fade away and only my true feelings remain.</p>
+              
+            <p><span class="highlight-text">Happy Birthday, my gorgeous, sensitive queen.</span> On this beautiful day, my greatest wish is for your heart to be filled with the absolute peace, joy, and laughter you so deeply deserve. May this year bring you endless reasons to smile, dreams that come true effortlessly, and the comfort of knowing you are fiercely cherished every single second.</p>
+              
+            <p>Thank you for letting me back into your world. No matter the distance we’ve crossed or the silence behind us, you have my complete, undivided devotion from this moment forward. I will never let you drift away again.</p>
+              
+            <p style="color: var(--accent-secondary); font-weight: bold; font-style: normal; text-align: center; font-size: 1.1rem; margin: 30px 0;">
+                Countless miles couldn't keep me away, and honestly, I am counting down the minutes because I absolutely cannot wait to finally meet you and hold you in person.
+            </p>
+              
+            <p style="text-align: center;">Sleep beautifully tonight, celebrate beautifully tomorrow, and know that I am on my way to you. 🤍✨</p>
+        </div>
     </div>
+</div>
 
-    <script>
-        // Initialize hearts animation timing
-        (function(){ const hearts = document.querySelectorAll('.heart'); hearts.forEach((h,i)=>{ if(!h.style.left) h.style.left = (5 + i*12)%100 + '%'; if(!h.style.animationDuration) h.style.animationDuration = (9 + (i%5)) + 's'; if(!h.style.animationDelay) h.style.animationDelay = (i*0.6) + 's'; }); })();
+<script>
+    const currentYear = new Date().getFullYear();
+    let targetDate = new Date(`July 19, ${currentYear} 00:00:00`).getTime();
+      
+    if (new Date().getTime() > targetDate && new Date().getMonth() === 6 && new Date().getDate() > 19) {
+        targetDate = new Date(`July 19, ${currentYear + 1} 00:00:00`).getTime();
+    }
 
-        // Improved navigation: add simple fade by toggling classes with a small delay to allow transition
-        function nextPage(id){
-            const pages = document.querySelectorAll('.page');
-            const target = document.getElementById(id);
-            pages.forEach(p => {
-                if(p === target){
-                    p.classList.add('active');
-                    p.classList.remove('inactive');
-                } else {
-                    p.classList.remove('active');
-                    p.classList.add('inactive');
-                }
-            });
-            // scroll to top of the target element smoothly
-            if(target){ target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    const unlockBtn = document.getElementById('unlockBtn');
+
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const difference = targetDate - now;
+
+        if (difference <= 0) {
+            document.getElementById('days').innerText = "00";
+            document.getElementById('hours').innerText = "00";
+            document.getElementById('minutes').innerText = "00";
+            document.getElementById('seconds').innerText = "00";
+            unlockBtn.removeAttribute('disabled');
+            clearInterval(countdownInterval);
+            return;
         }
 
-        function submitDate(e){ e.preventDefault(); nextPage('page7'); }
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-        // Countdown to next July 19th 00:00
-        function updateCountdown(){ const now=new Date(); let year=now.getFullYear(); let target=new Date(`July 19, ${year} 00:00:00`); if(now>target){ year++; target=new Date(`July 19, ${year} 00:00:00`);} const diff=target-now; const d=Math.floor(diff/(1000*60*60*24)); const h=Math.floor((diff%(1000*60*60*24))/(1000*60*60)); const m=Math.floor((diff%(1000*60*60))/(1000*60)); const s=Math.floor((diff%(1000*60))/1000); document.getElementById('days').innerText = d<10 ? '0'+d : d; document.getElementById('hours').innerText = h<10 ? '0'+h : h; document.getElementById('minutes').innerText = m<10 ? '0'+m : m; document.getElementById('seconds').innerText = s<10 ? '0'+s : s; }
-        updateCountdown(); setInterval(updateCountdown,1000);
-    </script>
+        document.getElementById('days').innerText = String(days).padStart(2, '0');
+        document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+        document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+        document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+    }
+
+    const countdownInterval = setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    function nextPage(pageId) {
+        if (pageId === 2 && new Date().getTime() < targetDate) {
+            alert("The lock is secure. Please wait until July 19th at 12:00 AM, beautiful.");
+            return;
+        }
+
+        const pages = document.querySelectorAll('.page');
+        pages.forEach(p => p.classList.remove('active'));
+
+        const nextPageEl = document.getElementById('page' + pageId);
+        if (nextPageEl) {
+            nextPageEl.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+
+    function submitForm(event) {
+        event.preventDefault();
+        nextPage(7);
+    }
+</script>
+
 </body>
 </html>
