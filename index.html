@@ -3,288 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Private Access Required</title>
+    <title>The Midnight Lock — Private Access</title>
     <style>
         :root {
-            --bg-color: #2b0a1d; /* deeper rose */
+            --bg-color: #2b0a1d;
             --card-bg: rgba(255, 255, 255, 0.03);
-            --accent-color: #ff5a8b; /* warm rose */
-            --accent-color-2: #ff9bb3; /* soft pink */
+            --accent-color: #ff5a8b;
+            --accent-color-2: #ff9bb3;
             --text-color: #fff6fb;
             --text-muted: #f0dfe8;
             --border-glow: rgba(255, 90, 139, 0.25);
         }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-        html,body { height: 100%; }
-
-        body {
+        * { box-sizing: border-box; margin:0; padding:0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        html,body{height:100%}
+        body{
             background: radial-gradient(600px 400px at 10% 20%, rgba(255,155,179,0.06), transparent 12%),
                         radial-gradient(700px 500px at 90% 80%, rgba(255,90,139,0.05), transparent 14%),
                         linear-gradient(180deg, #3a0620 0%, var(--bg-color) 60%, #12020a 100%);
-            color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow-x: hidden;
-            padding: 28px;
-            position: relative;
+            color:var(--text-color);
+            min-height:100vh; display:flex; align-items:center; justify-content:center; padding:28px; position:relative; overflow:hidden;
         }
-
-        /* Soft vignette + glow */
-        body::before{
-            content: '';
-            position: fixed;
-            inset: 0;
-            background: radial-gradient(60% 40% at 50% 30%, rgba(255,155,179,0.03), transparent 30%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Floating hearts background */
-        .hearts {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .heart{
-            position: absolute;
-            width: 26px;
-            height: 26px;
-            transform: translateY(0) rotate(-10deg);
-            opacity: 0.9;
-            filter: drop-shadow(0 8px 20px rgba(255,90,139,0.12));
-            animation: floatUp linear infinite;
-        }
-
-        /* create a heart shape using :before/:after */
-        .heart:before, .heart:after{
-            content: '';
-            position: absolute;
-            width: 26px;
-            height: 26px;
-            background: linear-gradient(180deg,var(--accent-color),var(--accent-color-2));
-            border-radius: 50px 50px 0 0;
-        }
-        .heart:before{ transform: translate(-13px,0) rotate(-45deg); }
-        .heart:after{ transform: translate(13px,0) rotate(45deg); }
-
-        @keyframes floatUp{
-            0% { transform: translateY(0) scale(0.9) rotate(-10deg); opacity: 0; }
-            10% { opacity: 0.95; }
-            50% { transform: translateY(-45vh) scale(1.05) rotate(10deg); opacity: 0.95; }
-            100% { transform: translateY(-110vh) scale(1.0) rotate(25deg); opacity: 0; }
-        }
-
-        .page {
-            display: none;
-            width: 100%;
-            max-width: 680px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
-            backdrop-filter: blur(14px) saturate(120%);
-            border-radius: 20px;
-            padding: 36px 34px;
-            text-align: center;
-            z-index: 2;
-            border: 1px solid rgba(255,255,255,0.04);
-            box-shadow: 0 18px 60px rgba(10,6,10,0.6), 0 0 40px var(--border-glow);
-            animation: fadeIn .6s ease forwards;
-        }
-        .page.active{ display: block; }
-        @keyframes fadeIn{ from{opacity:0; transform:translateY(12px)} to{opacity:1; transform:none;} }
-
-        .icon{ font-size:2.8rem; margin-bottom:18px; display:inline-block; filter: drop-shadow(0 10px 30px rgba(255,90,139,0.12)); }
-        h1{ font-size:1.65rem; margin-bottom:12px; color:#fff; letter-spacing:0.2px }
-
-        .status-badge{ background: linear-gradient(90deg, rgba(255,90,139,0.08), rgba(255,155,179,0.04)); color: var(--accent-color); padding:8px 16px; border-radius:999px; font-weight:600; margin-bottom:18px; display:inline-block; border:1px solid rgba(255,90,139,0.12)}
-
-        p{ color: var(--text-muted); font-size:1rem; line-height:1.7; margin-bottom:18px }
+        body::before{ content:''; position:fixed; inset:0; background: radial-gradient(60% 40% at 50% 30%, rgba(255,155,179,0.03), transparent 30%); pointer-events:none; z-index:0 }
+        .hearts{ position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden }
+        .heart{ position:absolute; transform:translateY(0) rotate(-10deg); opacity:0.9; filter:drop-shadow(0 8px 20px rgba(255,90,139,0.12)); animation: floatUp linear infinite }
+        .heart:before,.heart:after{ content:''; position:absolute; width:26px; height:26px; background:linear-gradient(180deg,var(--accent-color),var(--accent-color-2)); border-radius:50px 50px 0 0 }
+        .heart:before{ transform: translate(-13px,0) rotate(-45deg) }
+        .heart:after{ transform: translate(13px,0) rotate(45deg) }
+        @keyframes floatUp{ 0%{ transform:translateY(0) scale(0.9) rotate(-10deg); opacity:0 } 10%{ opacity:0.95 } 50%{ transform:translateY(-45vh) scale(1.05) rotate(10deg); opacity:0.95 } 100%{ transform:translateY(-110vh) scale(1) rotate(25deg); opacity:0 } }
+        .page{ display:none; width:100%; max-width:720px; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)); backdrop-filter: blur(14px) saturate(120%); border-radius:20px; padding:36px; text-align:center; z-index:2; border:1px solid rgba(255,255,255,0.04); box-shadow: 0 18px 60px rgba(10,6,10,0.6), 0 0 40px var(--border-glow); }
+        .page.active{ display:block }
+        .icon{ font-size:2.8rem; margin-bottom:18px }
+        h1{ font-size:1.6rem; margin-bottom:12px }
+        .status-badge{ background: linear-gradient(90deg, rgba(255,90,139,0.08), rgba(255,155,179,0.04)); color:var(--accent-color); padding:8px 16px; border-radius:999px; font-weight:600; margin-bottom:18px; display:inline-block; border:1px solid rgba(255,90,139,0.12) }
+        p{ color:var(--text-muted); font-size:1rem; line-height:1.7; margin-bottom:16px }
         .attention-box{ background: rgba(255,255,255,0.02); border-left:4px solid var(--accent-color); padding:12px; border-radius:8px; text-align:left; margin:18px 0 }
-
         .countdown{ display:flex; justify-content:center; gap:12px; margin:18px 0 24px }
-        .countdown-item{ background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:10px 12px; border-radius:10px; min-width:62px; border:1px solid rgba(255,255,255,0.03)}
+        .countdown-item{ background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:10px 12px; border-radius:10px; min-width:62px; border:1px solid rgba(255,255,255,0.03) }
         .countdown-time{ font-size:1.35rem; font-weight:700; color:#fff }
         .countdown-label{ font-size:0.72rem; color:var(--text-muted); text-transform:uppercase }
-
         .btn{ display:block; width:100%; background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-2) 100%); color:white; border:0; padding:14px 18px; border-radius:999px; font-weight:700; cursor:pointer; box-shadow:0 8px 30px rgba(255,90,139,0.18); transition:transform .18s ease }
         .btn:hover{ transform:translateY(-4px) }
-        .btn-secondary{ background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--text-color); }
-
+        .btn-secondary{ background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--text-color) }
         .form-group{ text-align:left; margin-bottom:14px }
         .form-group label{ color:var(--text-color); display:block; margin-bottom:8px; font-weight:600 }
         .form-group input{ width:100%; padding:12px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); background:rgba(255,255,255,0.02); color:var(--text-color) }
         .contact-info{ margin:18px 0; background: rgba(255,255,255,0.02); padding:12px; border-radius:10px; border:1px dashed rgba(255,255,255,0.03); color:var(--text-muted) }
-
-        .override-title{ color: var(--accent-color); text-shadow:0 0 14px rgba(255,155,179,0.12) }
-
-        @media (max-width:520px){ .page{ padding:22px } .countdown{ gap:8px } }
+        .override-title{ color:var(--accent-color); text-shadow:0 0 14px rgba(255,155,179,0.12) }
+        @media (max-width:520px){ .page{ padding:22px } }
     </style>
 </head>
 <body>
-
     <div class="hearts" aria-hidden="true">
-        <!-- Hearts will be positioned and animated via inline styles -->
-        <span class="heart" style="left:8%; bottom:-10%; width:22px; height:22px; animation-duration:12s; animation-delay:0s;"></span>
-        <span class="heart" style="left:22%; bottom:-8%; width:30px; height:30px; animation-duration:10s; animation-delay:1s;"></span>
-        <span class="heart" style="left:38%; bottom:-12%; width:18px; height:18px; animation-duration:14s; animation-delay:2s;"></span>
-        <span class="heart" style="left:54%; bottom:-6%; width:26px; height:26px; animation-duration:11s; animation-delay:0.5s;"></span>
-        <span class="heart" style="left:70%; bottom:-15%; width:20px; height:20px; animation-duration:13s; animation-delay:2.2s;"></span>
-        <span class="heart" style="left:86%; bottom:-9%; width:28px; height:28px; animation-duration:9s; animation-delay:1.6s;"></span>
+        <span class="heart" style="left:6%; bottom:-12%; width:20px; height:20px; animation-duration:12s; animation-delay:0s"></span>
+        <span class="heart" style="left:18%; bottom:-8%; width:28px; height:28px; animation-duration:10s; animation-delay:0.6s"></span>
+        <span class="heart" style="left:33%; bottom:-14%; width:18px; height:18px; animation-duration:14s; animation-delay:1.2s"></span>
+        <span class="heart" style="left:48%; bottom:-10%; width:26px; height:26px; animation-duration:11s; animation-delay:0.3s"></span>
+        <span class="heart" style="left:62%; bottom:-16%; width:22px; height:22px; animation-duration:13s; animation-delay:1.8s"></span>
+        <span class="heart" style="left:78%; bottom:-9%; width:30px; height:30px; animation-duration:9s; animation-delay:1s"></span>
     </div>
 
     <!-- Page 1: The Midnight Lock -->
     <div id="page1" class="page active" role="region" aria-label="The Midnight Lock">
         <div class="icon">🌌</div>
-        <h1>Private Access Required</h1>
+        <h1>The Midnight Lock 🔒</h1>
         <div class="status-badge">⏱️ System Status: Secured until July 19th at 12:00 AM</div>
-        <p>You have received an exclusive invitation to a private digital experience curated entirely for you, but access to my heart is strictly timed to the exact moment your special day begins.</p>
-
-        <div class="attention-box"><strong>⚠️ ATTENTION:</strong> Please read each section carefully and ensure you select the correct path to proceed, beautiful.</div>
-
+        <p>You have received an exclusive invitation to a private digital space curated entirely for you. Access is strictly timed to the exact, magical moment your special day begins, because a celebration this meaningful deserves to wait for its perfect time.</p>
+        <div class="attention-box"><strong>⚠️ NOTE:</strong> Please read each section carefully and choose your path forward, beautiful.</div>
         <div class="countdown" role="timer" aria-live="polite">
             <div class="countdown-item"><span class="countdown-time" id="days">00</span><span class="countdown-label">Days</span></div>
             <div class="countdown-item"><span class="countdown-time" id="hours">00</span><span class="countdown-label">Hours</span></div>
             <div class="countdown-item"><span class="countdown-time" id="minutes">00</span><span class="countdown-label">Mins</span></div>
             <div class="countdown-item"><span class="countdown-time" id="seconds">00</span><span class="countdown-label">Secs</span></div>
         </div>
-
-        <button class="btn" onclick="nextPage('page2')">Unlock My Devotion 🔓</button>
+        <button class="btn" onclick="nextPage('page2')">Proceed to the Next Chapter 🔓</button>
     </div>
 
     <!-- Page 2: Reconnecting the Signal -->
     <div id="page2" class="page" role="region" aria-label="Reconnecting the Signal">
         <div class="icon">📡</div>
-        <h1>Signal Restored...</h1>
+        <h1>Reconnecting the Signal 🛰️</h1>
         <div class="status-badge">Did you miss me as much as I missed you? 😉</div>
-        <p>I know my radar went completely quiet for the last 6 months, and I know that silence may have caused doubt or frustration, but my thoughts have inevitably pulled me right back to your side tonight because I could not let the most captivating person in my life celebrate her birthday without reclaiming my spot as the guy who is completely crazy about you.</p>
-        <button class="btn" onclick="nextPage('page3')">Step closer into my arms ✨</button>
+        <p>I know my radar went completely quiet for the last 6 months, and I know that silence may have caused doubt or hurt. I am so deeply sorry for the distance. But through it all, my thoughts have inevitably pulled me right back to your side tonight. I simply could not let the most captivating person in my world celebrate her birthday without trying to reclaim my spot as the guy who is completely crazy about you.</p>
+        <button class="btn" onclick="nextPage('page3')">Walk Forward Into My World ✨</button>
     </div>
 
-    <!-- Page 3: The Ultimate Flex -->
-    <div id="page3" class="page" role="region" aria-label="The Ultimate Flex">
+    <!-- Page 3: The Ultimate Devotion -->
+    <div id="page3" class="page" role="region" aria-label="The Ultimate Devotion">
         <div class="icon">🌹</div>
-        <h1>Happy Birthday to the one who completely owns me.</h1>
-        <p>You have successfully navigated another year, but let's be entirely honest—the absolute highlight of my year has simply been knowing that you belong to me, because no matter how much distance the world tries to put between us, nothing can change the beautiful fact that nobody else gets to hold that precious heart of yours.</p>
-        <button class="btn" onclick="nextPage('page4')">Melt into the next step 💋</button>
+        <h1>The Ultimate Devotion 👑</h1>
+        <p>Happy Birthday to the one who holds my entire heart. You have successfully navigated another beautiful year, and let's be entirely honest—the absolute highlight of my year has simply been the privilege of knowing you and holding you close in my thoughts. No matter how much distance the world tries to put between us, nothing can change the beautiful truth that your heart is the only place I ever want to be.</p>
+        <button class="btn" onclick="nextPage('page4')">Let Me Show You How Much I Care ✨</button>
     </div>
 
     <!-- Page 4: The Spoiled Princess Manifesto -->
     <div id="page4" class="page" role="region" aria-label="The Spoiled Princess Manifesto">
         <div class="icon">🥂</div>
-        <h1>Your Only Responsibilities for Today, My Queen:</h1>
-        <p>Since today is entirely dedicated to you, you are officially commanded to turn off the rest of the world and rest under a mountain of blankets for as long as your gorgeous heart desires, indulge in absolutely every single one of your favorite treats because calories legally do not exist when you are this beautiful, and remember that I am counting down the exact seconds until I can hold you tight.</p>
-        <button class="btn" onclick="nextPage('page5')">Unlock your romantic voucher 🍿</button>
+        <h1>The Spoiled Princess Manifesto 🥞🛌</h1>
+        <p>Your Only Responsibilities for Today, My Queen: Since today is entirely dedicated to honoring you, you are officially requested to turn off the rest of the world, rest under a mountain of blankets for as long as your gorgeous heart desires, and indulge in absolutely every single one of your favorite treats. Calories legally do not exist when you are this breathtaking. Just remember that I am counting down the exact seconds until I can hold you tight.</p>
+        <button class="btn" onclick="nextPage('page5')">Reveal Your Birthday Surprise 🍿</button>
     </div>
 
     <!-- Page 5: The Reconciliation -->
     <div id="page5" class="page" role="region" aria-label="The Reconciliation">
         <div class="icon">🥺</div>
-        <h1>A Moment of Absolute Honesty...</h1>
-        <p>I am fully aware that stepping away for 6 months was a massive mistake, and knowing how deeply and beautifully you feel things, I want to look you in the eyes and ask—are you ready to forgive your favorite distraction, or am I still facing the consequences?</p>
-        <button class="btn btn-secondary" onclick="nextPage('page5_5')">I am still deciding if you are out of trouble. 🤬</button>
-        <button class="btn" onclick="nextPage('page6')">I will forgive you only if you pull me close. 😤</button>
+        <h1>The Reconciliation 🥺</h1>
+        <p>A Moment of Absolute Honest... I am fully aware that stepping away for 6 months was a massive mistake. Knowing how deeply and beautifully you feel things, I want to look you in the eyes and gently ask—are you ready to forgive your favorite distraction, or do I still need to earn my way back into your good graces?</p>
+        <button class="btn btn-secondary" onclick="nextPage('page5_5')">I am still deciding if you are out of trouble. 😤</button>
+        <button class="btn" onclick="nextPage('page6')">I will forgive you only if you promise to hold me close. 🤍</button>
     </div>
 
     <!-- Page 5.5: System Override -->
     <div id="page5_5" class="page" role="region" aria-label="System Override">
         <div class="icon">🛑</div>
-        <h1 class="override-title">System Override: Action Required</h1>
-        <div class="status-badge">Nice try, but you are blocked from staying away from me. 💘</div>
-        <p>Access Denied because the system has completely bypassed your hesitation, refusing to let you pout or hold onto any lingering doubts on your birthday, which means the choice has been made for you—the universe demands that you forgive me, that you like this website, and honestly, that you love the guy who built it just to see you smile.</p>
-        <button class="btn" onclick="nextPage('page6')">Accept terms & hold my hand 🌙</button>
-        <button class="btn btn-secondary" onclick="nextPage('page6')">View the final arrangement 🎁</button>
+        <h1 class="override-title">System Override 🛑</h1>
+        <div class="status-badge">Connection Re-established</div>
+        <p>Nice try, but the system gently refuses to let you stay away from me. 💘 Access Denied because this website has completely bypassed your hesitation. It simply refuses to let you pout or hold onto any lingering doubts on your birthday, which means the universe has made the choice for us—it gently insists that you forgive me, that you smile at this screen, and honestly, that you open your heart to the guy who built this just to see you happy.</p>
+        <button class="btn" onclick="nextPage('page6')">Accept Terms & View Our Plans 🌙</button>
     </div>
 
-    <!-- Page 6: The Plot Twist & The Reservation -->
-    <div id="page6" class="page" role="region" aria-label="The Plot Twist & The Reservation">
+    <!-- Page 6: The Plot Twist & The Promise -->
+    <div id="page6" class="page" role="region" aria-label="The Plot Twist & The Promise">
         <div class="icon">🌹❤️</div>
-        <h1>My Biggest Mistake & The Real Gift...</h1>
-        <p>Leaving a girl as precious, sensitive, and breathtaking as you in the dark for 6 months was a profound mistake, and because a standard digital message could never suffice for a girl who deserves the world, the real gift is that I am traveling to come see you in person.</p>
-        
+        <h1>The Plot Twist & The Promise ✈️🎬</h1>
+        <p>My Biggest Mistake & The Real Gift... Leaving a girl as precious, sensitive, and breathtaking as you in the dark for 6 months was a profound mistake. Because a standard digital message could never suffice for someone who deserves the absolute world, the real gift is that I am traveling to come see you in person.</p>
         <form id="reservationForm" onsubmit="submitDate(event)">
-            <div class="form-group">
-                <label for="meetup">📍 Where shall we arrange our primary meetup?</label>
-                <input type="text" id="meetup" placeholder="Your favorite spot..." required>
-            </div>
-            <div class="form-group">
-                <label for="date">📅 Which date am I officially picking you up?</label>
-                <input type="text" id="date" placeholder="e.g. July 20th" required>
-            </div>
-            <div class="form-group">
-                <label for="movie">🍿 We are 100% going on a movie date. Which film are we watching while I hold your hand?</label>
-                <input type="text" id="movie" placeholder="Choose a movie..." required>
-            </div>
-            <div class="form-group">
-                <label for="restaurant">🍽️ Which restaurant are we visiting to feed my favorite girl right after?</label>
-                <input type="text" id="restaurant" placeholder="Where would you love to eat?" required>
-            </div>
-
-            <div class="contact-info">
-                📞 <strong>Direct Line / WhatsApp:</strong> 1234577890
-            </div>
-
-            <button type="submit" class="btn">Confirm Our Date & Read My Final Vow 💌</button>
+            <div class="form-group"><label for="meetup">📍 Where shall we arrange our primary meetup?</label><input id="meetup" required placeholder="City / Venue"></div>
+            <div class="form-group"><label for="date">📅 Which date am I officially picking you up?</label><input id="date" required placeholder="e.g. July 20th"></div>
+            <div class="form-group"><label for="movie">🍿 Which film are we watching while I hold your hand?</label><input id="movie" required placeholder="Movie name"></div>
+            <div class="form-group"><label for="restaurant">🍽️ Which restaurant are we visiting to feed my favorite girl right after?</label><input id="restaurant" required placeholder="Restaurant"></div>
+            <div class="contact-info">📞 <strong>Direct Line / WhatsApp:</strong> 1234577890</div>
+            <button type="submit" class="btn">Confirm Our Date & Read My Final Wish 💌</button>
         </form>
     </div>
 
     <!-- Page 7: The Eternal Orbit -->
     <div id="page7" class="page" role="region" aria-label="The Eternal Orbit">
         <div class="icon">🔒✨</div>
-        <h1>Completely and Forever Yours.</h1>
-        <p>You have reached the final destination of this journey where all navigation options conclude, ensuring I will never let you drift away from my life or my arms again. Happy Birthday, my gorgeous, sensitive queen—thank you for allowing me back into your world, and may your evening be filled with absolute peace knowing that no matter the distance, you belong with me, and you have my complete, undivided devotion forever.</p>
-        
-        <div class="status-badge" style="background: transparent; border-color: transparent; font-size: 1.1rem;">
-            I cannot wait to hold you in person very soon. 🤍✨
-        </div>
+        <h1>The Eternal Orbit 🌌</h1>
+        <p>The Greatest Wish for My Whole World. You have reached the final destination of this journey, where all the screens fade away and only my true feelings remain. Happy Birthday, my gorgeous, sensitive queen. On this beautiful day, my greatest wish is for your heart to be filled with the absolute peace, joy, and laughter you so deeply deserve. May this year bring you endless reasons to smile, dreams that come true effortlessly, and the comfort of knowing you are fiercely cherished every single second.</p>
+        <p>Thank you for letting me back into your world. No matter the distance we’ve crossed or the silence behind us, you have my complete, undivided devotion from this moment forward. I will never let you drift away again. Countless miles couldn't keep me away, and honestly, I am counting down the minutes because I absolutely cannot wait to finally meet you and hold you in person. Sleep beautifully tonight, celebrate beautifully tomorrow, and know that I am on my way to you. 🤍✨</p>
     </div>
 
     <script>
-        // Place hearts positions randomization (initial placement already included), ensure they animate with varied durations.
-        (function(){
-            const hearts = document.querySelectorAll('.heart');
-            hearts.forEach((h, i) => {
-                // randomize left slightly and animation timing if not provided
-                if (!h.style.left) h.style.left = (5 + i*12) + '%';
-                if (!h.style.animationDuration) h.style.animationDuration = (9 + (i%5)) + 's';
-                if (!h.style.animationDelay) h.style.animationDelay = (i*0.6) + 's';
-            });
-        })();
+        // Initialize hearts animation timing
+        (function(){ const hearts = document.querySelectorAll('.heart'); hearts.forEach((h,i)=>{ if(!h.style.left) h.style.left = (5 + i*12)%100 + '%'; if(!h.style.animationDuration) h.style.animationDuration = (9 + (i%5)) + 's'; if(!h.style.animationDelay) h.style.animationDelay = (i*0.6) + 's'; }); })();
 
-        // Simple Page Navigation
-        function nextPage(pageId) {
-            const pages = document.querySelectorAll('.page');
-            pages.forEach(page => page.classList.remove('active'));
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) { targetPage.classList.add('active'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
-        }
+        function nextPage(id){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); const t=document.getElementById(id); if(t){ t.classList.add('active'); window.scrollTo({top:0,behavior:'smooth'}); } }
+        function submitDate(e){ e.preventDefault(); // form data could be processed here
+            nextPage('page7'); }
 
-        // Form Submission to trigger page 7
-        function submitDate(event) {
-            event.preventDefault();
-            nextPage('page7');
-        }
-
-        // Live Countdown Timer logic targeting next July 19th
-        function updateCountdown() {
-            const now = new Date();
-            let targetYear = now.getFullYear();
-            let targetDate = new Date(`July 19, ${targetYear} 00:00:00`);
-            if (now > targetDate) { targetYear++; targetDate = new Date(`July 19, ${targetYear} 00:00:00`); }
-            const diff = targetDate - now;
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
-            document.getElementById('days').innerText = d < 10 ? '0' + d : d;
-            document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
-            document.getElementById('minutes').innerText = m < 10 ? '0' + m : m;
-            document.getElementById('seconds').innerText = s < 10 ? '0' + s : s;
-        }
-        updateCountdown(); setInterval(updateCountdown, 1000);
+        // Countdown to next July 19th 00:00
+        function updateCountdown(){ const now=new Date(); let year=now.getFullYear(); let target=new Date(`July 19, ${year} 00:00:00`); if(now>target){ year++; target=new Date(`July 19, ${year} 00:00:00`);} const diff=target-now; const d=Math.floor(diff/(1000*60*60*24)); const h=Math.floor((diff%(1000*60*60*24))/(1000*60*60)); const m=Math.floor((diff%(1000*60*60))/(1000*60)); const s=Math.floor((diff%(1000*60))/1000); document.getElementById('days').innerText = d<10 ? '0'+d : d; document.getElementById('hours').innerText = h<10 ? '0'+h : h; document.getElementById('minutes').innerText = m<10 ? '0'+m : m; document.getElementById('seconds').innerText = s<10 ? '0'+s : s; }
+        updateCountdown(); setInterval(updateCountdown,1000);
     </script>
 </body>
 </html>
