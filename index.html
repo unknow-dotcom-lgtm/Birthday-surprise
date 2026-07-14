@@ -6,279 +6,157 @@
     <title>Private Access Required</title>
     <style>
         :root {
-            --bg-color: #0a0512;
-            --card-bg: rgba(20, 12, 30, 0.75);
-            --accent-color: #ff3366;
-            --text-color: #f4f2f7;
-            --text-muted: #b5a9c0;
-            --border-glow: rgba(255, 51, 102, 0.3);
+            --bg-color: #2b0a1d; /* deeper rose */
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --accent-color: #ff5a8b; /* warm rose */
+            --accent-color-2: #ff9bb3; /* soft pink */
+            --text-color: #fff6fb;
+            --text-muted: #f0dfe8;
+            --border-glow: rgba(255, 90, 139, 0.25);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        html,body { height: 100%; }
 
         body {
-            background: radial-gradient(circle at center, #1a0b2e 0%, var(--bg-color) 100%);
+            background: radial-gradient(600px 400px at 10% 20%, rgba(255,155,179,0.06), transparent 12%),
+                        radial-gradient(700px 500px at 90% 80%, rgba(255,90,139,0.05), transparent 14%),
+                        linear-gradient(180deg, #3a0620 0%, var(--bg-color) 60%, #12020a 100%);
             color: var(--text-color);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow-x: hidden;
-            padding: 20px;
+            padding: 28px;
+            position: relative;
         }
 
-        /* Ambient background stars effect */
-        .stars {
+        /* Soft vignette + glow */
+        body::before{
+            content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: transparent url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"%3E%3Ccircle cx="50" cy="80" r="1" fill="%23fff" opacity="0.3"/%3E%3Ccircle cx="150" cy="40" r="1" fill="%23fff" opacity="0.5"/%3E%3Ccircle cx="320" cy="120" r="1.5" fill="%23fff" opacity="0.4"/%3E%3Ccircle cx="280" cy="300" r="1" fill="%23fff" opacity="0.6"/%3E%3Ccircle cx="90" cy="270" r="1.2" fill="%23fff" opacity="0.3"/%3E%3C/svg%3E') repeat;
-            z-index: 1;
+            inset: 0;
+            background: radial-gradient(60% 40% at 50% 30%, rgba(255,155,179,0.03), transparent 30%);
             pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Floating hearts background */
+        .hearts {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .heart{
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            transform: translateY(0) rotate(-10deg);
+            opacity: 0.9;
+            filter: drop-shadow(0 8px 20px rgba(255,90,139,0.12));
+            animation: floatUp linear infinite;
+        }
+
+        /* create a heart shape using :before/:after */
+        .heart:before, .heart:after{
+            content: '';
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            background: linear-gradient(180deg,var(--accent-color),var(--accent-color-2));
+            border-radius: 50px 50px 0 0;
+        }
+        .heart:before{ transform: translate(-13px,0) rotate(-45deg); }
+        .heart:after{ transform: translate(13px,0) rotate(45deg); }
+
+        @keyframes floatUp{
+            0% { transform: translateY(0) scale(0.9) rotate(-10deg); opacity: 0; }
+            10% { opacity: 0.95; }
+            50% { transform: translateY(-45vh) scale(1.05) rotate(10deg); opacity: 0.95; }
+            100% { transform: translateY(-110vh) scale(1.0) rotate(25deg); opacity: 0; }
         }
 
         .page {
             display: none;
             width: 100%;
-            max-width: 550px;
-            background: var(--card-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 25px var(--border-glow);
-            border-radius: 24px;
-            padding: 40px 30px;
+            max-width: 680px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+            backdrop-filter: blur(14px) saturate(120%);
+            border-radius: 20px;
+            padding: 36px 34px;
             text-align: center;
             z-index: 2;
-            animation: fadeIn 0.8s ease forwards;
+            border: 1px solid rgba(255,255,255,0.04);
+            box-shadow: 0 18px 60px rgba(10,6,10,0.6), 0 0 40px var(--border-glow);
+            animation: fadeIn .6s ease forwards;
         }
+        .page.active{ display: block; }
+        @keyframes fadeIn{ from{opacity:0; transform:translateY(12px)} to{opacity:1; transform:none;} }
 
-        .page.active {
-            display: block;
-        }
+        .icon{ font-size:2.8rem; margin-bottom:18px; display:inline-block; filter: drop-shadow(0 10px 30px rgba(255,90,139,0.12)); }
+        h1{ font-size:1.65rem; margin-bottom:12px; color:#fff; letter-spacing:0.2px }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .status-badge{ background: linear-gradient(90deg, rgba(255,90,139,0.08), rgba(255,155,179,0.04)); color: var(--accent-color); padding:8px 16px; border-radius:999px; font-weight:600; margin-bottom:18px; display:inline-block; border:1px solid rgba(255,90,139,0.12)}
 
-        .icon {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            display: inline-block;
-            filter: drop-shadow(0 0 10px var(--accent-color));
-            animation: float 3s ease-in-out infinite;
-        }
+        p{ color: var(--text-muted); font-size:1rem; line-height:1.7; margin-bottom:18px }
+        .attention-box{ background: rgba(255,255,255,0.02); border-left:4px solid var(--accent-color); padding:12px; border-radius:8px; text-align:left; margin:18px 0 }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
+        .countdown{ display:flex; justify-content:center; gap:12px; margin:18px 0 24px }
+        .countdown-item{ background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:10px 12px; border-radius:10px; min-width:62px; border:1px solid rgba(255,255,255,0.03)}
+        .countdown-time{ font-size:1.35rem; font-weight:700; color:#fff }
+        .countdown-label{ font-size:0.72rem; color:var(--text-muted); text-transform:uppercase }
 
-        h1 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            color: #fff;
-        }
+        .btn{ display:block; width:100%; background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-color-2) 100%); color:white; border:0; padding:14px 18px; border-radius:999px; font-weight:700; cursor:pointer; box-shadow:0 8px 30px rgba(255,90,139,0.18); transition:transform .18s ease }
+        .btn:hover{ transform:translateY(-4px) }
+        .btn-secondary{ background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--text-color); }
 
-        .status-badge {
-            background: rgba(255, 51, 102, 0.15);
-            color: var(--accent-color);
-            padding: 6px 16px;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            display: inline-block;
-            margin-bottom: 25px;
-            border: 1px solid rgba(255, 51, 102, 0.3);
-            font-weight: 500;
-        }
+        .form-group{ text-align:left; margin-bottom:14px }
+        .form-group label{ color:var(--text-color); display:block; margin-bottom:8px; font-weight:600 }
+        .form-group input{ width:100%; padding:12px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); background:rgba(255,255,255,0.02); color:var(--text-color) }
+        .contact-info{ margin:18px 0; background: rgba(255,255,255,0.02); padding:12px; border-radius:10px; border:1px dashed rgba(255,255,255,0.03); color:var(--text-muted) }
 
-        p {
-            font-size: 1.05rem;
-            line-height: 1.7;
-            color: var(--text-muted);
-            margin-bottom: 30px;
-        }
+        .override-title{ color: var(--accent-color); text-shadow:0 0 14px rgba(255,155,179,0.12) }
 
-        .attention-box {
-            background: rgba(255, 255, 255, 0.03);
-            border-left: 3px solid var(--accent-color);
-            padding: 15px;
-            border-radius: 0 12px 12px 0;
-            text-align: left;
-            margin-bottom: 30px;
-            font-size: 0.95rem;
-        }
-
-        .attention-box span {
-            color: var(--accent-color);
-            font-weight: bold;
-        }
-
-        /* Countdown styling */
-        .countdown {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin: 25px 0 35px 0;
-        }
-
-        .countdown-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 10px 15px;
-            border-radius: 12px;
-            min-width: 70px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .countdown-time {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #fff;
-            display: block;
-        }
-
-        .countdown-label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-
-        /* Buttons & Controls */
-        .btn {
-            display: block;
-            width: 100%;
-            background: linear-gradient(135deg, var(--accent-color) 0%, #bd0847 100%);
-            color: white;
-            border: none;
-            padding: 16px 25px;
-            border-radius: 50px;
-            font-size: 1.05rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(255, 51, 102, 0.4);
-            margin-bottom: 12px;
-            text-decoration: none;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 51, 102, 0.6);
-        }
-
-        .btn:active {
-            transform: translateY(1px);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: none;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--accent-color);
-            box-shadow: 0 0 15px rgba(255, 51, 102, 0.2);
-        }
-
-        /* Form styling for Page 6 */
-        .form-group {
-            text-align: left;
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.95rem;
-            color: var(--text-color);
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-
-        .form-group input {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 14px 20px;
-            border-radius: 12px;
-            color: #fff;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 10px rgba(255, 51, 102, 0.2);
-        }
-
-        .contact-info {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
-            padding: 15px;
-            margin: 25px 0;
-            font-size: 0.95rem;
-            border: 1px dashed rgba(255, 255, 255, 0.1);
-        }
-
-        /* Specific override styling */
-        .override-title {
-            color: #ff3366 !important;
-            text-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
-        }
+        @media (max-width:520px){ .page{ padding:22px } .countdown{ gap:8px } }
     </style>
 </head>
 <body>
 
-    <div class="stars"></div>
+    <div class="hearts" aria-hidden="true">
+        <!-- Hearts will be positioned and animated via inline styles -->
+        <span class="heart" style="left:8%; bottom:-10%; width:22px; height:22px; animation-duration:12s; animation-delay:0s;"></span>
+        <span class="heart" style="left:22%; bottom:-8%; width:30px; height:30px; animation-duration:10s; animation-delay:1s;"></span>
+        <span class="heart" style="left:38%; bottom:-12%; width:18px; height:18px; animation-duration:14s; animation-delay:2s;"></span>
+        <span class="heart" style="left:54%; bottom:-6%; width:26px; height:26px; animation-duration:11s; animation-delay:0.5s;"></span>
+        <span class="heart" style="left:70%; bottom:-15%; width:20px; height:20px; animation-duration:13s; animation-delay:2.2s;"></span>
+        <span class="heart" style="left:86%; bottom:-9%; width:28px; height:28px; animation-duration:9s; animation-delay:1.6s;"></span>
+    </div>
 
     <!-- Page 1: The Midnight Lock -->
-    <div id="page1" class="page active">
+    <div id="page1" class="page active" role="region" aria-label="The Midnight Lock">
         <div class="icon">🌌</div>
         <h1>Private Access Required</h1>
         <div class="status-badge">⏱️ System Status: Secured until July 19th at 12:00 AM</div>
         <p>You have received an exclusive invitation to a private digital experience curated entirely for you, but access to my heart is strictly timed to the exact moment your special day begins.</p>
-        
-        <div class="attention-box">
-            <span>⚠️ ATTENTION:</span> Please read each section carefully and ensure you select the correct path to proceed, beautiful.
-        </div>
 
-        <div class="countdown">
-            <div class="countdown-item">
-                <span class="countdown-time" id="days">00</span>
-                <span class="countdown-label">Days</span>
-            </div>
-            <div class="countdown-item">
-                <span class="countdown-time" id="hours">00</span>
-                <span class="countdown-label">Hours</span>
-            </div>
-            <div class="countdown-item">
-                <span class="countdown-time" id="minutes">00</span>
-                <span class="countdown-label">Mins</span>
-            </div>
-            <div class="countdown-item">
-                <span class="countdown-time" id="seconds">00</span>
-                <span class="countdown-label">Secs</span>
-            </div>
+        <div class="attention-box"><strong>⚠️ ATTENTION:</strong> Please read each section carefully and ensure you select the correct path to proceed, beautiful.</div>
+
+        <div class="countdown" role="timer" aria-live="polite">
+            <div class="countdown-item"><span class="countdown-time" id="days">00</span><span class="countdown-label">Days</span></div>
+            <div class="countdown-item"><span class="countdown-time" id="hours">00</span><span class="countdown-label">Hours</span></div>
+            <div class="countdown-item"><span class="countdown-time" id="minutes">00</span><span class="countdown-label">Mins</span></div>
+            <div class="countdown-item"><span class="countdown-time" id="seconds">00</span><span class="countdown-label">Secs</span></div>
         </div>
 
         <button class="btn" onclick="nextPage('page2')">Unlock My Devotion 🔓</button>
     </div>
 
     <!-- Page 2: Reconnecting the Signal -->
-    <div id="page2" class="page">
+    <div id="page2" class="page" role="region" aria-label="Reconnecting the Signal">
         <div class="icon">📡</div>
         <h1>Signal Restored...</h1>
         <div class="status-badge">Did you miss me as much as I missed you? 😉</div>
@@ -287,7 +165,7 @@
     </div>
 
     <!-- Page 3: The Ultimate Flex -->
-    <div id="page3" class="page">
+    <div id="page3" class="page" role="region" aria-label="The Ultimate Flex">
         <div class="icon">🌹</div>
         <h1>Happy Birthday to the one who completely owns me.</h1>
         <p>You have successfully navigated another year, but let's be entirely honest—the absolute highlight of my year has simply been knowing that you belong to me, because no matter how much distance the world tries to put between us, nothing can change the beautiful fact that nobody else gets to hold that precious heart of yours.</p>
@@ -295,7 +173,7 @@
     </div>
 
     <!-- Page 4: The Spoiled Princess Manifesto -->
-    <div id="page4" class="page">
+    <div id="page4" class="page" role="region" aria-label="The Spoiled Princess Manifesto">
         <div class="icon">🥂</div>
         <h1>Your Only Responsibilities for Today, My Queen:</h1>
         <p>Since today is entirely dedicated to you, you are officially commanded to turn off the rest of the world and rest under a mountain of blankets for as long as your gorgeous heart desires, indulge in absolutely every single one of your favorite treats because calories legally do not exist when you are this beautiful, and remember that I am counting down the exact seconds until I can hold you tight.</p>
@@ -303,7 +181,7 @@
     </div>
 
     <!-- Page 5: The Reconciliation -->
-    <div id="page5" class="page">
+    <div id="page5" class="page" role="region" aria-label="The Reconciliation">
         <div class="icon">🥺</div>
         <h1>A Moment of Absolute Honesty...</h1>
         <p>I am fully aware that stepping away for 6 months was a massive mistake, and knowing how deeply and beautifully you feel things, I want to look you in the eyes and ask—are you ready to forgive your favorite distraction, or am I still facing the consequences?</p>
@@ -312,7 +190,7 @@
     </div>
 
     <!-- Page 5.5: System Override -->
-    <div id="page5_5" class="page">
+    <div id="page5_5" class="page" role="region" aria-label="System Override">
         <div class="icon">🛑</div>
         <h1 class="override-title">System Override: Action Required</h1>
         <div class="status-badge">Nice try, but you are blocked from staying away from me. 💘</div>
@@ -322,7 +200,7 @@
     </div>
 
     <!-- Page 6: The Plot Twist & The Reservation -->
-    <div id="page6" class="page">
+    <div id="page6" class="page" role="region" aria-label="The Plot Twist & The Reservation">
         <div class="icon">🌹❤️</div>
         <h1>My Biggest Mistake & The Real Gift...</h1>
         <p>Leaving a girl as precious, sensitive, and breathtaking as you in the dark for 6 months was a profound mistake, and because a standard digital message could never suffice for a girl who deserves the world, the real gift is that I am traveling to come see you in person.</p>
@@ -337,7 +215,7 @@
                 <input type="text" id="date" placeholder="e.g. July 20th" required>
             </div>
             <div class="form-group">
-                <label for="movie">��� We are 100% going on a movie date. Which film are we watching while I hold your hand?</label>
+                <label for="movie">🍿 We are 100% going on a movie date. Which film are we watching while I hold your hand?</label>
                 <input type="text" id="movie" placeholder="Choose a movie..." required>
             </div>
             <div class="form-group">
@@ -354,7 +232,7 @@
     </div>
 
     <!-- Page 7: The Eternal Orbit -->
-    <div id="page7" class="page">
+    <div id="page7" class="page" role="region" aria-label="The Eternal Orbit">
         <div class="icon">🔒✨</div>
         <h1>Completely and Forever Yours.</h1>
         <p>You have reached the final destination of this journey where all navigation options conclude, ensuring I will never let you drift away from my life or my arms again. Happy Birthday, my gorgeous, sensitive queen—thank you for allowing me back into your world, and may your evening be filled with absolute peace knowing that no matter the distance, you belong with me, and you have my complete, undivided devotion forever.</p>
@@ -365,24 +243,28 @@
     </div>
 
     <script>
+        // Place hearts positions randomization (initial placement already included), ensure they animate with varied durations.
+        (function(){
+            const hearts = document.querySelectorAll('.heart');
+            hearts.forEach((h, i) => {
+                // randomize left slightly and animation timing if not provided
+                if (!h.style.left) h.style.left = (5 + i*12) + '%';
+                if (!h.style.animationDuration) h.style.animationDuration = (9 + (i%5)) + 's';
+                if (!h.style.animationDelay) h.style.animationDelay = (i*0.6) + 's';
+            });
+        })();
+
         // Simple Page Navigation
         function nextPage(pageId) {
-            // Hide all pages
             const pages = document.querySelectorAll('.page');
             pages.forEach(page => page.classList.remove('active'));
-            
-            // Show target page
             const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.add('active');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
+            if (targetPage) { targetPage.classList.add('active'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
         }
 
         // Form Submission to trigger page 7
         function submitDate(event) {
             event.preventDefault();
-            // Optional: You could gather form data here if connecting to a backend.
             nextPage('page7');
         }
 
@@ -390,32 +272,19 @@
         function updateCountdown() {
             const now = new Date();
             let targetYear = now.getFullYear();
-            
-            // Set target to July 19th of the current year
             let targetDate = new Date(`July 19, ${targetYear} 00:00:00`);
-            
-            // If July 19th has already passed this year, count down to next year's
-            if (now > targetDate) {
-                targetYear++;
-                targetDate = new Date(`July 19, ${targetYear} 00:00:00`);
-            }
-
+            if (now > targetDate) { targetYear++; targetDate = new Date(`July 19, ${targetYear} 00:00:00`); }
             const diff = targetDate - now;
-
             const d = Math.floor(diff / (1000 * 60 * 60 * 24));
             const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
             const s = Math.floor((diff % (1000 * 60)) / 1000);
-
             document.getElementById('days').innerText = d < 10 ? '0' + d : d;
             document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
             document.getElementById('minutes').innerText = m < 10 ? '0' + m : m;
             document.getElementById('seconds').innerText = s < 10 ? '0' + s : s;
         }
-
-        // Run countdown instantly and then update every second
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
+        updateCountdown(); setInterval(updateCountdown, 1000);
     </script>
 </body>
 </html>
