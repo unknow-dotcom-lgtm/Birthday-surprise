@@ -138,39 +138,6 @@
             box-shadow: none;
         }
 
-        .countdown-container {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 25px;
-            text-align: center;
-            border: 1px dashed rgba(214, 175, 57, 0.3);
-        }
-
-        .countdown {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--accent-secondary);
-            margin-top: 10px;
-        }
-
-        .countdown-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .countdown-label {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            margin-top: 5px;
-            font-family: sans-serif;
-        }
-
         .form-group {
             margin-bottom: 22px;
             text-align: left;
@@ -234,16 +201,7 @@
         <div class="alert-box">
             ⚠️ <strong>NOTE:</strong> Please read each section carefully and choose your path forward, beautiful.
         </div>
-        <div class="countdown-container">
-            <div class="countdown-label" style="font-size:0.85rem;">Time Left Until Access Granted:</div>
-            <div id="timer" class="countdown">
-                <div class="countdown-item"><span id="days">00</span><span class="countdown-label">Days</span></div>
-                <div class="countdown-item"><span id="hours">00</span><span class="countdown-label">Hrs</span></div>
-                <div class="countdown-item"><span id="minutes">00</span><span class="countdown-label">Mins</span></div>
-                <div class="countdown-item"><span id="seconds">00</span><span class="countdown-label">Secs</span></div>
-            </div>
-        </div>
-        <button id="unlockBtn" class="btn" onclick="nextPage(2)" disabled>Proceed to the Next Chapter 🔓</button>
+        <button id="unlockBtn" class="btn" onclick="nextPage(2)">Proceed to the Next Chapter 🔓</button>
     </div>
 
     <!-- Page 2 -->
@@ -340,54 +298,12 @@
 </div>
 
 <script>
-    const currentYear = new Date().getFullYear();
-    let targetDate = new Date(`July 19, ${currentYear} 00:00:00`).getTime();
-      
-    if (new Date().getTime() > targetDate && new Date().getMonth() === 6 && new Date().getDate() > 19) {
-        targetDate = new Date(`July 19, ${currentYear + 1} 00:00:00`).getTime();
-    }
-
-    const unlockBtn = document.getElementById('unlockBtn');
-
-    function updateCountdown() {
-        const now = new Date().getTime();
-        const difference = targetDate - now;
-
-        if (difference <= 0) {
-            document.getElementById('days').innerText = "00";
-            document.getElementById('hours').innerText = "00";
-            document.getElementById('minutes').innerText = "00";
-            document.getElementById('seconds').innerText = "00";
-            unlockBtn.removeAttribute('disabled');
-            clearInterval(countdownInterval);
-            return;
-        }
-
-        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-        document.getElementById('days').innerText = String(days).padStart(2, '0');
-        document.getElementById('hours').innerText = String(hours).padStart(2, '0');
-        document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
-        document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
-    }
-
-    const countdownInterval = setInterval(updateCountdown, 1000);
-    updateCountdown();
-
+    // Simplified navigation: no countdown — access is immediate
     function nextPage(pageId) {
         // Accept either a number (page index) or a full id string like 'page5_5'
         let targetId;
         if (typeof pageId === 'number') targetId = 'page' + pageId;
         else targetId = pageId;
-
-        // Prevent unlocking page 2 before the target date
-        if (targetId === 'page2' && new Date().getTime() < targetDate) {
-            alert("The lock is secure. Please wait until July 19th at 12:00 AM, beautiful.");
-            return;
-        }
 
         const pages = document.querySelectorAll('.page');
         pages.forEach(p => p.classList.remove('active'));
