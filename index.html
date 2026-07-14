@@ -15,13 +15,16 @@
             --border-glow: rgba(255, 90, 139, 0.25);
         }
         * { box-sizing: border-box; margin:0; padding:0; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        html{ scroll-behavior: smooth; }
         html,body{height:100%}
         body{
             background: radial-gradient(600px 400px at 10% 20%, rgba(255,155,179,0.06), transparent 12%),
                         radial-gradient(700px 500px at 90% 80%, rgba(255,90,139,0.05), transparent 14%),
                         linear-gradient(180deg, #3a0620 0%, var(--bg-color) 60%, #12020a 100%);
             color:var(--text-color);
-            min-height:100vh; display:flex; align-items:center; justify-content:center; padding:28px; position:relative; overflow:hidden;
+            min-height:100vh; 
+            /* Allow the page to scroll naturally */
+            padding:28px; position:relative; overflow:auto;
         }
         body::before{ content:''; position:fixed; inset:0; background: radial-gradient(60% 40% at 50% 30%, rgba(255,155,179,0.03), transparent 30%); pointer-events:none; z-index:0 }
         .hearts{ position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden }
@@ -30,8 +33,9 @@
         .heart:before{ transform: translate(-13px,0) rotate(-45deg) }
         .heart:after{ transform: translate(13px,0) rotate(45deg) }
         @keyframes floatUp{ 0%{ transform:translateY(0) scale(0.9) rotate(-10deg); opacity:0 } 10%{ opacity:0.95 } 50%{ transform:translateY(-45vh) scale(1.05) rotate(10deg); opacity:0.95 } 100%{ transform:translateY(-110vh) scale(1) rotate(25deg); opacity:0 } }
-        .page{ display:none; width:100%; max-width:720px; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)); backdrop-filter: blur(14px) saturate(120%); border-radius:20px; padding:36px; text-align:center; z-index:2; border:1px solid rgba(255,255,255,0.04); box-shadow: 0 18px 60px rgba(10,6,10,0.6), 0 0 40px var(--border-glow); }
-        .page.active{ display:block }
+        .page{ display:none; width:100%; max-width:720px; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)); backdrop-filter: blur(14px) saturate(120%); border-radius:20px; padding:36px; text-align:center; z-index:2; border:1px solid rgba(255,255,255,0.04); box-shadow: 0 18px 60px rgba(10,6,10,0.6), 0 0 40px var(--border-glow); margin:40px auto; transition: transform 400ms ease, opacity 400ms ease; }
+        .page.active{ display:block; transform: translateY(0); opacity:1 }
+        .page.inactive{ transform: translateY(10px); opacity:0 }
         .icon{ font-size:2.8rem; margin-bottom:18px }
         h1{ font-size:1.6rem; margin-bottom:12px }
         .status-badge{ background: linear-gradient(90deg, rgba(255,90,139,0.08), rgba(255,155,179,0.04)); color:var(--accent-color); padding:8px 16px; border-radius:999px; font-weight:600; margin-bottom:18px; display:inline-block; border:1px solid rgba(255,90,139,0.12) }
@@ -148,9 +152,24 @@
         // Initialize hearts animation timing
         (function(){ const hearts = document.querySelectorAll('.heart'); hearts.forEach((h,i)=>{ if(!h.style.left) h.style.left = (5 + i*12)%100 + '%'; if(!h.style.animationDuration) h.style.animationDuration = (9 + (i%5)) + 's'; if(!h.style.animationDelay) h.style.animationDelay = (i*0.6) + 's'; }); })();
 
-        function nextPage(id){ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); const t=document.getElementById(id); if(t){ t.classList.add('active'); window.scrollTo({top:0,behavior:'smooth'}); } }
-        function submitDate(e){ e.preventDefault(); // form data could be processed here
-            nextPage('page7'); }
+        // Improved navigation: add simple fade by toggling classes with a small delay to allow transition
+        function nextPage(id){
+            const pages = document.querySelectorAll('.page');
+            const target = document.getElementById(id);
+            pages.forEach(p => {
+                if(p === target){
+                    p.classList.add('active');
+                    p.classList.remove('inactive');
+                } else {
+                    p.classList.remove('active');
+                    p.classList.add('inactive');
+                }
+            });
+            // scroll to top of the target element smoothly
+            if(target){ target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+        }
+
+        function submitDate(e){ e.preventDefault(); nextPage('page7'); }
 
         // Countdown to next July 19th 00:00
         function updateCountdown(){ const now=new Date(); let year=now.getFullYear(); let target=new Date(`July 19, ${year} 00:00:00`); if(now>target){ year++; target=new Date(`July 19, ${year} 00:00:00`);} const diff=target-now; const d=Math.floor(diff/(1000*60*60*24)); const h=Math.floor((diff%(1000*60*60*24))/(1000*60*60)); const m=Math.floor((diff%(1000*60*60))/(1000*60)); const s=Math.floor((diff%(1000*60))/1000); document.getElementById('days').innerText = d<10 ? '0'+d : d; document.getElementById('hours').innerText = h<10 ? '0'+h : h; document.getElementById('minutes').innerText = m<10 ? '0'+m : m; document.getElementById('seconds').innerText = s<10 ? '0'+s : s; }
