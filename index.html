@@ -243,7 +243,7 @@
                 <div class="countdown-item"><span id="seconds">00</span><span class="countdown-label">Secs</span></div>
             </div>
         </div>
-        <button id="unlockBtn" class="btn" onclick="nextPage(2)" disabled>Proceed to the Next Chapter ��</button>
+        <button id="unlockBtn" class="btn" onclick="nextPage(2)" disabled>Proceed to the Next Chapter 🔓</button>
     </div>
 
     <!-- Page 2 -->
@@ -275,12 +275,12 @@
         <div class="icon-header">🥺</div>
         <h2>A Moment of Absolute Honesty...</h2>
         <p>I am fully aware that stepping away for 6 months was a massive mistake. Knowing how deeply and beautifully you feel things, I want to look you in the eyes and gently ask—are you ready to forgive your favorite distraction, or do I still need to earn my way back into your good graces?</p>
-        <button class="btn" onclick="nextPage(5.5)">I will forgive you only if you promise to hold me close. 🤍</button>
-        <button class="btn" onclick="nextPage(5.5)">I am still deciding if you are out of trouble. 😤</button>
+        <button class="btn" onclick="nextPage('page5_5')">I will forgive you only if you promise to hold me close. 🤍</button>
+        <button class="btn" onclick="nextPage('page5_5')">I am still deciding if you are out of trouble. 😤</button>
     </div>
 
     <!-- Page 5.5 -->
-    <div id="page5.5" class="page">
+    <div id="page5_5" class="page">
         <div class="icon-header">🛑</div>
         <h2>🛑 System Override: Connection Re-established</h2>
         <p>Nice try, but the system gently refuses to let you stay away from me. 💘</p>
@@ -378,7 +378,13 @@
     updateCountdown();
 
     function nextPage(pageId) {
-        if (pageId === 2 && new Date().getTime() < targetDate) {
+        // Accept either a number (page index) or a full id string like 'page5_5'
+        let targetId;
+        if (typeof pageId === 'number') targetId = 'page' + pageId;
+        else targetId = pageId;
+
+        // Prevent unlocking page 2 before the target date
+        if (targetId === 'page2' && new Date().getTime() < targetDate) {
             alert("The lock is secure. Please wait until July 19th at 12:00 AM, beautiful.");
             return;
         }
@@ -386,7 +392,7 @@
         const pages = document.querySelectorAll('.page');
         pages.forEach(p => p.classList.remove('active'));
 
-        const nextPageEl = document.getElementById('page' + pageId);
+        const nextPageEl = document.getElementById(targetId);
         if (nextPageEl) {
             nextPageEl.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
